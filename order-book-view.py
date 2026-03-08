@@ -14,11 +14,12 @@ def parse_arguments():
     TIMEOUT_MIN = 2
     DEPTH_MIN = 1
 
-    parser = argparse.ArgumentParser(description='Obtain an order book from Binance')
-    parser.add_argument('--symbol', type=str, default="BTCUSDT", help='symbol (BTCUSDT,SOLUSDT,ETHUSDT,ETHBTC, ...)')
-    parser.add_argument('--depth', type=int, default="15", help='number of price levels')
-    parser.add_argument('--precision', type=int, default="2", help='floating point numbers precision')
-    parser.add_argument('--timeout', type=int, default="3", help='data update timeout')
+    parser = argparse.ArgumentParser(description='Obtain an order book data from Binance')
+    parser.add_argument('-s', '--symbol', type=str, default="BTCUSDT", metavar="name", help='instrument symbol (BTCUSDT,SOLUSDT,ETHUSDT,ETHBTC, ...)')
+    parser.add_argument('-d', '--depth', type=int, default="15", metavar="number", help='number of price levels (default: 15)')
+    parser.add_argument('-p', '--precision', type=int, default="2", metavar="number", help='floating point numbers precision (default : 2)')
+    parser.add_argument('-t', '--timeout', type=int, default="3", metavar="number", help='update timeout in seconds (default: 3)')
+    parser.add_argument('-H', '--host', type=str, metavar="URL", default="https://api.binance.com", help='host URL (default: https://api.binance.com )')
 
     args = parser.parse_args()
 
@@ -29,7 +30,8 @@ def parse_arguments():
     
 class OrderBook():
 
-    ORDER_BOOK_REMOTE_REFERENCE_TEMPLATE:str = "https://api.binance.com/api/v3/depth?symbol={}&limit={}"
+    ORDER_BOOK_REMOTE_REFERENCE_TEMPLATE:str = "{}/api/v3/depth?symbol={}&limit={}"	
+
 
     _remote_reference : str
     _symbol : str 
@@ -37,10 +39,10 @@ class OrderBook():
     _bids : dict
     _asks : dict
 
-    def __init__(self, symbol:str, depth:int):
+    def __init__(self, host:str, symbol:str, depth:int):
         self._symbol = symbol
         self._depth = depth
-        self._remote_reference = self.ORDER_BOOK_REMOTE_REFERENCE_TEMPLATE.format(symbol, depth)
+        self._remote_reference = self.ORDER_BOOK_REMOTE_REFERENCE_TEMPLATE.format(host, symbol, depth)
 
 
     def refresh_content(self):
@@ -139,6 +141,6 @@ if __name__ == "__main__":
 
     args = parse_arguments()    
 
-    order_book = OrderBook(args.symbol, args.depth)
+    order_book = OrderBook(args.host, args.symbol, args.depth)
     renderer = OrderBookRenderer(order_book, args.precision, args.timeout)
     renderer.render()
