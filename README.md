@@ -14,12 +14,12 @@ Python app that visualizes Binance Order Book data.
 #### Command line arguments:
         
 ```
--h, --help              show this help message and exit
---symbol SYMBOL         instrument symbol (BTCUSDT,SOLUSDT,ETHUSDT,ETHBTC, ...)
-                        (BTCUSDT by default)
---depth DEPTH           number of price levels (15 by default)
---precision PRECISION   floating point numbers precision (2 by default)
---timeout TIMEOUT       data update timeout (3s by default)
+-h, --help      show this help message and exit
+-s, --symbol    instrument symbol (BTCUSDT,SOLUSDT,ETHUSDT,ETHBTC, ...) (BTCUSDT by default)
+-d, --depth     number of price levels (15 by default)
+-p, --precision floating point numbers precision (2 by default)
+-t, --timeout   update timeout (3s by default)
+-H, --host      host URL (default: https://api.binance.com)
 
 ```
 #### Samples of usage:
